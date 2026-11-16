@@ -1,45 +1,85 @@
-# Catalogue de ressources – Lab 17 bis
+# Ressources du Lab 17 bis : catalogues au DSFR adossés à Grist
 
-Widget personnalisé pour [Grist](https://grist.numerique.gouv.fr) (La Suite numérique) qui affiche une table de ressources avec l'interface du Système de design de l'État (DSFR) : recherche, filtres par type et mots-clés, fiches détaillées, téléchargement des pièces jointes.
+**Publier un catalogue de ressources (outils, méthodes, conseils, assistants) et un catalogue d'interventions sous forme de pages web au Système de design de l'État (DSFR), alimentées par une base Grist.**
 
-Le dépôt ne contient **que le code de la page** : aucune ressource, aucun fichier, aucune donnée. Tout (titres, descriptions, pièces jointes) vient de la table Grist à laquelle le widget est lié, et reste protégé par les règles d'accès Grist.
+Conçu par le [Lab 17 bis](https://lab17bis.github.io/ressources/), laboratoire d'innovation publique de l'[académie de Reims](https://www.ac-reims.fr/), au sein de l'équipe Dynamique Modernisation et Transformation (DMT) du rectorat.
 
-## Deux façons d'ouvrir le catalogue
+> Le dépôt ne contient **que le code des pages** : aucune ressource, aucun fichier, aucune donnée. Les fiches, descriptions et pièces jointes restent dans Grist, protégées par les règles d'accès du document.
 
-| Adresse | Mode | Données |
-|---|---|---|
-| `https://lab17bis.github.io/ressources/` | Page publique autonome, en pleine page | Lues directement dans le document Grist, partagé en lecture publique |
-| `https://lab17bis.github.io/ressources/interventions/` | Idem pour le catalogue des interventions | Idem |
-| Widget dans Grist (même adresse) | Vue de travail dans le document | Lues par l'API des widgets Grist |
+## En bref
 
-En page autonome, la page interroge l'API de Grist sans identifiant. Elle ne voit que ce qu'un visiteur anonyme a le droit de voir : les **règles d'accès du document** (Permissions avancées) décident des fiches et des colonnes publiques. Ne retirez pas ces règles.
+| Catalogue | Adresse publique | À quoi il sert |
+| --- | --- | --- |
+| **Catalogue de ressources** | <https://lab17bis.github.io/ressources/> | Partager les outils, méthodes, conseils et assistants du Lab 17 bis : intelligence collective, conduite de projet, accompagnement du changement. Chaque fiche peut être consultée, téléchargée et partagée par un lien direct. |
+| **Catalogue des interventions** | <https://lab17bis.github.io/ressources/interventions/> | Rendre visible l'offre de service du Lab 17 bis : animations, formations et acculturations, sessions de facilitation, accompagnements de projet, demandes de conseil. |
 
-Les anciennes adresses `plein-ecran.html` redirigent vers la page autonome, en conservant le lien vers une fiche (`#r/…`).
+Les deux pages fonctionnent de deux façons :
 
-Ajouter `?demo=1` à l'adresse affiche des données fictives.
+- **en page publique autonome**, en pleine page, pour les visiteurs ;
+- **en widget personnalisé dans Grist**, comme vue de travail dans le document.
 
-## Utilisation dans Grist
+## Fonctionnalités
 
-1. Dans un document Grist, ajouter un widget **Personnalisé** → **URL personnalisée**.
-2. Saisir l'adresse de la page publiée (GitHub Pages) de ce dépôt.
-3. Dans le panneau du créateur, associer les colonnes de la table :
+**Catalogue de ressources**
 
-| Rôle | Type de colonne conseillé | Obligatoire |
-|---|---|---|
-| Titre | Texte | oui |
-| Type | Choix | non |
-| Description | Texte | non |
-| Mots-clés | Liste de choix | non |
-| Auteur | Texte | non |
-| Date | Date | non |
-| Fichier(s) joint(s) | Pièces jointes | non |
-| Lien externe | Texte (URL http/https) | non |
+- Entrée par le besoin (« Je veux… comprendre une situation, cadrer et décider, imaginer et concevoir, faire échanger un groupe, formaliser et piloter le changement »).
+- Sections par type (outils, méthodes, assistants, conseils, livrables, ateliers clés en main) et filtres propres à chaque section.
+- Recherche plein texte et tri.
+- Fiche détaillée : en bref, ce que ça apporte, comment faire, points de vigilance, matériel, aperçu des fiches PDF (recto et verso), téléchargement des pièces jointes.
+- Lien direct partageable vers chaque fiche (`#r/<identifiant>`).
+- Bouton « Contribuer » : message pré-rempli vers le Lab 17 bis.
 
-## Modération
+**Catalogue des interventions**
 
-Le widget affiche toutes les lignes qu'il reçoit. Pour ne publier que les ressources validées, **ne filtrez pas dans le widget** : posez une règle d'accès Grist (Permissions avancées) qui ne rend lisibles aux visiteurs que les lignes dont le statut est « validé ».
+- Filtres par statut (en cours, à venir, réalisées), type, année scolaire et origine (sollicitation ou initiative du Lab).
+- Fiche détaillée : besoin, démarche, livrables, effets, ressources mobilisées, citation.
+- Bouton « Solliciter le Lab ».
+
+## Fonctionnement
+
+```
+Visiteur ──> GitHub Pages : page DSFR (code seulement)
+         ──> API Grist, sans identifiant : fiches publiées et colonnes publiques uniquement
+```
+
+- En **page autonome**, la page interroge l'API de Grist comme un visiteur anonyme. Elle ne voit que ce que les **règles d'accès du document** (Permissions avancées) autorisent : seules les fiches publiées (case `valide`) et les colonnes publiques remontent. Ne retirez pas ces règles.
+- En **widget Grist**, la page lit les données par l'API des widgets, avec les droits de la personne connectée.
+- Les anciennes adresses `plein-ecran.html` redirigent vers la page autonome, en conservant le lien vers une fiche.
+- Ajouter `?demo=1` à l'adresse affiche des données fictives.
+
+## Mise en place
+
+1. Dans Grist, préparez la table : colonnes `titre`, `type`, `description`, `tags`, `fichier`, `image`, `valide`, etc. La liste complète figure dans la constante `COLONNES` de `app.js` (et de `interventions/app.js`).
+2. Posez les règles d'accès : les visiteurs ne lisent que les lignes publiées et les colonnes publiques.
+3. Partagez le document en lecture publique.
+4. Renseignez l'adresse du document et le nom de la table dans la constante `SOURCE` de `app.js`.
+5. Pour la vue de travail, ajoutez dans Grist un widget **Personnalisé** avec l'adresse `https://lab17bis.github.io/ressources/` (ou `…/ressources/interventions/`), accès **lecture de la table**, puis associez les colonnes.
+
+## Contenu du dépôt
+
+| Fichier | Contenu |
+| --- | --- |
+| `index.html`, `app.js`, `style.css` | Catalogue de ressources. |
+| `interventions/` | Catalogue des interventions (même socle). |
+| `plein-ecran.html`, `interventions/plein-ecran.html` | Anciennes adresses, redirigées vers les pages autonomes. |
+| `assets/` | Logos, visuels des assistants, lecteur PDF ([PDF.js](https://mozilla.github.io/pdf.js/)). |
+| `dsfr/` | Feuilles de style, polices et icônes du DSFR (version 1.15.4), embarquées. |
+
+## Écosystème
+
+- **[Grist](https://grist.numerique.gouv.fr)** : tableur-base de données libre ([gristlabs/grist-core](https://github.com/gristlabs/grist-core)), proposé aux agents de l'État par la [DINUM](https://www.numerique.gouv.fr/) dans [La Suite numérique](https://lasuite.numerique.gouv.fr/).
+- **[Système de design de l'État (DSFR)](https://www.systeme-de-design.gouv.fr/)** ([GouvernementFR/dsfr](https://github.com/GouvernementFR/dsfr)).
+- **[Communauté Grist francophone](https://forum.grist.libre.sh/)**.
+- Autres outils du Lab 17 bis : [questionnaires DSFR avec logique conditionnelle](https://github.com/lab17bis/questionnaires), [suivi de projets](https://github.com/lab17bis/projets).
+
+## Mots-clés
+
+Grist, widget Grist, catalogue, centre de ressources, bibliothèque d'outils, boîte à outils, fiches méthodes, intelligence collective, facilitation, conduite du changement, offre de service, DSFR, Système de design de l'État, La Suite numérique, DINUM, Éducation nationale, académie de Reims, laboratoire d'innovation publique, innovation publique.
 
 ## Licences et mentions
 
-- Le DSFR (`dsfr/`, version 1.15.4) et la police Marianne sont fournis par le Gouvernement et leur usage est réservé aux sites et services de la sphère publique. Voir <https://www.systeme-de-design.gouv.fr/>.
-- Le code propre à ce dépôt (`index.html`, `app.js`, `style.css`) est la production du Lab 17 bis.
+- Les **contenus** du catalogue (fiches, visuels) sont publiés sous licence [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.fr), sauf mention contraire.
+- Le **DSFR** (`dsfr/`) et la police Marianne sont fournis par le Gouvernement. Leur usage est réservé aux sites et services de la sphère publique. Voir <https://www.systeme-de-design.gouv.fr/>.
+- Le **code** propre à ce dépôt est la production du Lab 17 bis.
+
+Contact : Lab 17 bis, <lab17bis@ac-reims.fr>
