@@ -58,6 +58,8 @@
     var vus = {}, out = [];
     E.lignes.forEach(function (r) {
       var v = r[colonne];
+      var sep = (E.config && E.config.separateurs || {})[colonne];
+      if (sep && typeof v === "string") { v = ["L"].concat(v.split(sep).map(function (x) { return x.trim(); }).filter(Boolean)); }
       var l = Array.isArray(v) ? (v[0] === "L" ? v.slice(1) : v) : (v === true ? ["true"] : (v === null || v === undefined || v === "" || v === false ? [] : [v]));
       l.forEach(function (x) { x = String(x); if (!vus[x]) { vus[x] = 1; out.push(x); } });
     });
@@ -228,6 +230,7 @@
         caseC(ch.concat(["multiple"]), "Choix multiples (les fiches doivent avoir toutes les valeurs cochées)") +
         caseC(ch.concat(["dansSection"]), "Afficher seulement quand une section est choisie") +
         caseC(ch.concat(["decroissant"]), "Ordre décroissant (ex. : années)") +
+        (f.colonne ? texte(["separateurs", f.colonne], "Séparateur dans les cellules de texte (facultatif)", { aide: "Si une cellule contient plusieurs valeurs, par exemple « 2025-2026 / 2026-2027 », indiquez « / »." }) : "") +
         (f.colonne ? "<details><summary class=\"fr-text--sm\">Libellés affichés</summary>" + valeursDe(f.colonne).map(function (v) {
           return texte(ch.concat(["libelles", v]), v);
         }).join("") + "</details>" : "");

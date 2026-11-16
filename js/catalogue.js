@@ -192,6 +192,16 @@
       return !col.publie || r[col.publie] === true;
     });
 
+    var separateurs = c.separateurs || {};
+    // Valeurs d'une cellule : liste Grist, ou texte découpé par le séparateur réglé pour la colonne.
+    function vals(r, colonne) {
+      var v = r[colonne];
+      if (separateurs[colonne] && typeof v === "string") {
+        return v.split(separateurs[colonne]).map(function (x) { return x.trim(); }).filter(Boolean);
+      }
+      return enListe(v).map(String);
+    }
+
     var el = c.elements;
     function nombre(n) { return n + " " + (n > 1 ? el.pluriel : el.singulier); }
     function aucun() { return (el.feminin ? "Aucune " : "Aucun ") + el.singulier + " ne correspond à votre recherche."; }
@@ -230,13 +240,13 @@
       c.etiquettes.forEach(function (e) {
         if (ou === "carte" && e.carte === false) { return; }
         if (ou === "fiche" && e.fiche === false) { return; }
-        var vals = enListe(r[e.colonne]).map(String);
-        if (e.seulementSiUnique && vals.length !== 1) { return; }
+        var ve = vals(r, e.colonne);
+        if (e.seulementSiUnique && ve.length !== 1) { return; }
         if (e.valeurs && e.valeurs.length) {
           var permis = e.valeurs.map(norm);
-          vals = vals.filter(function (v) { return permis.indexOf(norm(v)) >= 0; });
+          ve = ve.filter(function (v) { return permis.indexOf(norm(v)) >= 0; });
         }
-        vals.forEach(function (v) {
+        ve.forEach(function (v) {
           var lib = (e.libelles && e.libelles[v]) || (v === "true" ? (e.libelleVrai || e.colonne) : v);
           var coul = (e.couleurs && e.couleurs[v]) || {};
           var fond = couleurSure(coul.fond || e.fond), texte = couleurSure(coul.texte || e.texte);
@@ -266,7 +276,7 @@
     function valeursDe(colonne, lst) {
       var vus = {}, out = [];
       (lst || lignes).forEach(function (r) {
-        enListe(r[colonne]).map(String).forEach(function (v) { if (!vus[v]) { vus[v] = 1; out.push(v); } });
+        vals(r, colonne).forEach(function (v) { if (!vus[v]) { vus[v] = 1; out.push(v); } });
       });
       return out;
     }
@@ -283,7 +293,7 @@
       if (sec.valeurs && sec.valeurs.length) { vals = vals.filter(function (v) { return sec.valeurs.indexOf(v) >= 0; }); }
       return ordonner(vals, sec.ordre);
     }
-    function dansSection(r, s) { return !s || enListe(r[sec.colonne]).map(String).indexOf(s) >= 0; }
+    function dansSection(r, s) { return !s || vals(r, sec.colonne).indexOf(s) >= 0; }
 
     function correspond(r, ignorerFiltre) {
       if (etat.section && !dansSection(r, etat.section)) { return false; }
@@ -291,7 +301,7 @@
         var e = c.entrees.liste[Number(etat.entree)];
         if (e) {
           var attendus = (e.valeurs || []).map(norm);
-          if (!enListe(r[c.entrees.colonne]).some(function (v) { return attendus.indexOf(norm(v)) >= 0; })) { return false; }
+          if (!vals(r, c.entrees.colonne).some(function (v) { return attendus.indexOf(norm(v)) >= 0; })) { return false; }
         }
       }
       for (var i = 0; i < c.filtres.length; i++) {
@@ -299,11 +309,11 @@
         if (f.colonne === ignorerFiltre) { continue; }
         var sel = etat.filtres[f.colonne];
         if (!sel) { continue; }
-        var vals = enListe(r[f.colonne]).map(String);
+        var vf = vals(r, f.colonne);
         if (f.multiple) {
           var choisis = Object.keys(sel).filter(function (k) { return sel[k]; });
-          for (var j = 0; j < choisis.length; j++) { if (vals.indexOf(choisis[j]) < 0) { return false; } }
-        } else if (vals.indexOf(sel) < 0) { return false; }
+          for (var j = 0; j < choisis.length; j++) { if (vf.indexOf(choisis[j]) < 0) { return false; } }
+        } else if (vf.indexOf(sel) < 0) { return false; }
       }
       var q = norm(etat.q).trim();
       if (!q) { return true; }
@@ -467,7 +477,7 @@
             "<button type=\"button\" class=\"fr-btn fr-btn--sm " + (actif ? "" : "fr-btn--tertiary") + "\" data-section=\"" + esc(s) + "\" aria-pressed=\"" + actif + "\">" + esc(lib) + "</button>";
         };
         h += "<div class=\"ca-sections\" role=\"group\" aria-label=\"" + esc(sec.libelle || "Sections") + "\">" +
-          btn("", (sec.libelleTout || "Tout") + (etiq ? "" : " (" + lignes.filter(function (r) { return sections.some(function (s) { return dansSection(r, s); }); }).length + ")")) +
+          btn("", (sec.libelleTout || "Tout") + (etiq ? "" : " (" + lignes.length + ")")) +
           sections.map(function (s) { return btn(s, ((sec.libelles && sec.libelles[s]) || s) + (etiq ? "" : " (" + compter(s) + ")")); }).join("") + "</div>";
         if (sec.aide && !etat.section) { h += "<p class=\"fr-hint-text fr-mb-2w\">" + esc(sec.aide) + "</p>"; }
       }
