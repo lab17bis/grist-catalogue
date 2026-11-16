@@ -80,6 +80,6 @@ Grist, widget Grist, catalogue, centre de ressources, bibliothèque d'outils, bo
 
 - Les **contenus** du catalogue (fiches, visuels) sont publiés sous licence [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.fr), sauf mention contraire.
 - Le **DSFR** (`dsfr/`) et la police Marianne sont fournis par le Gouvernement. Leur usage est réservé aux sites et services de la sphère publique. Voir <https://www.systeme-de-design.gouv.fr/>.
-- Le **code** propre à ce dépôt est la production du Lab 17 bis.
+- Le **code** propre à ce dépôt est publié sous licence MIT (voir `LICENSE`). Réutilisation, adaptation et contributions bienvenues.
 
 Contact : Lab 17 bis, <lab17bis@ac-reims.fr>
