@@ -3,72 +3,112 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ressources du Lab 17 bis</title>
-  <link rel="stylesheet" href="dsfr/dsfr.min.css">
-  <link rel="stylesheet" href="style.css?v=33">
+  <title>Catalogue</title>
+  <link rel="stylesheet" href="vendor/dsfr/dsfr.min.css">
+  <link rel="stylesheet" href="css/page.css?v=1">
+  <link rel="stylesheet" href="css/catalogue.css?v=1">
 </head>
 <body>
   <div class="fr-skiplinks">
     <nav class="fr-container" role="navigation" aria-label="Accès rapide">
       <ul class="fr-skiplinks__list">
-        <li><a class="fr-link" href="#app">Contenu</a></li>
+        <li><a class="fr-link" href="#contenu">Contenu</a></li>
         <li><a class="fr-link" href="#pied">Pied de page</a></li>
       </ul>
     </nav>
   </div>
-
-  <header role="banner" class="fr-header lab-header">
-    <div class="fr-header__body">
-      <div class="fr-container">
-        <div class="fr-header__body-row">
-          <div class="fr-header__brand">
-            <div class="fr-header__brand-top">
-              <div class="fr-header__operator lab-operator">
-                <img class="lab-logo-lab" src="assets/logo-lab.svg" alt="Lab 17 bis, laboratoire d’innovation de l’Éducation nationale, Reims">
-              </div>
-            </div>
-            <div class="fr-header__service">
-              <p class="fr-header__service-title"><a href="#" id="l17-home" title="Accueil – Ressources du Lab 17 bis">Ressources du Lab 17 bis</a></p>
-              <p class="fr-header__service-tagline">Outils, méthodes, conseils et assistants pour soutenir son activité professionnelle</p>
-            </div>
-          </div>
-          <div class="fr-header__tools">
-            <div class="fr-header__tools-links">
-              <ul class="fr-btns-group">
-                <li><a class="fr-btn l17-btn-orange" id="l17-contrib" href="#" hidden title="Signaler une coquille, proposer une amélioration, contribuer ou nous contacter">Contribuer</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <main class="fr-container fr-py-3w" id="app" aria-live="polite">
+  <div id="entete"></div>
+  <main class="fr-container fr-py-4w" id="contenu" tabindex="-1">
     <p class="fr-text--sm">Chargement…</p>
   </main>
+  <div id="pied"></div>
 
-  <footer class="fr-footer" role="contentinfo" id="pied">
-    <div class="fr-container">
-      <div class="fr-footer__body">
-        <div class="fr-footer__brand lab-footer-brand lab-footer-logos">
-          <img class="lab-logo-academie" src="assets/logo-academie.svg" alt="Académie de Reims, Région académique Grand Est">
-          <img class="lab-logo-dmt" src="assets/logo-dmt.svg" alt="Dynamique Modernisation et Transformation (DMT)" onerror="this.remove()">
-        </div>
-        <div class="fr-footer__content">
-          <p class="fr-footer__content-desc">Le Lab 17 bis est le laboratoire d’innovation publique de l’académie de Reims, au sein de l’équipe Dynamique Modernisation et Transformation (DMT) du rectorat. Ces ressources sont partagées pour être utilisées et adaptées.</p>
-        </div>
-      </div>
-      <div class="fr-footer__bottom">
-        <ul class="fr-footer__bottom-list"><li class="fr-footer__bottom-item"><span class="fr-footer__bottom-link">Sauf mention contraire, les contenus sont publiés sous <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.fr" target="_blank" rel="noopener noreferrer" title="Licence CC BY-SA 4.0 - nouvelle fenêtre">licence CC BY-SA 4.0</a></span></li></ul>
-        <div class="fr-footer__bottom-copy"><p>© 2026 Lab 17 bis, académie de Reims. Vous pouvez partager et adapter ces ressources en citant le Lab 17 bis et en conservant la même licence.</p></div>
-      </div>
-    </div>
-  </footer>
+  <script>
+    // API Grist chargée seulement dans un widget (cadre Grist).
+    if (window.self !== window.top && !/[?&](grist|demo)=?/.test(location.search)) {
+      document.write('<script src="https://docs.getgrist.com/grist-plugin-api.js"><\/script>');
+    }
+  </script>
+  <script src="js/page-dsfr.js?v=1"></script>
+  <script src="js/catalogue.js?v=1"></script>
+  <script>
+  (function () {
+    "use strict";
+    var app = document.getElementById("contenu");
+    var params = new URLSearchParams(location.search);
+    var dansGrist = window.self !== window.top && params.get("grist") === null && params.get("demo") === null;
 
-  <!-- API plugin Grist : instance DINUM d'abord, copie publique en secours -->
-  <script src="https://grist.numerique.gouv.fr/grist-plugin-api.js"
-          onerror="var s=document.createElement('script');s.src='https://docs.getgrist.com/grist-plugin-api.js';s.onload=function(){window.__gristReload&&window.__gristReload()};document.head.appendChild(s);"></script>
-  <script src="app.js?v=33"></script>
+    function erreur(titre, texte) {
+      app.innerHTML = "";
+      var d = document.createElement("div");
+      d.className = "fr-alert fr-alert--error";
+      var h = document.createElement("h1"); h.className = "fr-alert__title"; h.textContent = titre;
+      var p = document.createElement("p"); p.textContent = texte;
+      d.appendChild(h); d.appendChild(p); app.appendChild(d);
+      document.title = titre;
+    }
+
+    function afficher(source, donnees) {
+      var config = donnees.config;
+      if (!config) {
+        erreur("Catalogue non configuré", "Ce tableau ne contient pas encore de réglages de catalogue. Configurez-le avec l'éditeur (editeur.html) dans Grist.");
+        return;
+      }
+      if (params.get("integre") !== "1") {
+        window.PageDSFR.appliquer(config.page, {
+          entete: document.getElementById("entete"),
+          pied: document.getElementById("pied"),
+          accueil: location.pathname + location.search
+        });
+      }
+      var instance = window.Catalogue.monter(app, {
+        config: config, lignes: donnees.lignes, types: donnees.types, source: source,
+        demo: source.mode === "demo",
+        lienPublic: source.mode === "widget" ? (config.publication && config.publication.lienPublic) : null
+      });
+      return instance;
+    }
+
+    var source;
+    if (params.get("demo") !== null) {
+      source = window.Catalogue.sourceDemo("exemples/demo.json");
+    } else if (params.get("grist")) {
+      source = window.Catalogue.sourceRest(params.get("grist"), params.get("table"));
+      if (!source) {
+        erreur("Lien incomplet", "Le lien doit indiquer le document Grist (?grist=…) et la table (&table=…).");
+        return;
+      }
+    } else if (dansGrist && window.grist) {
+      source = window.Catalogue.sourceWidget();
+    }
+
+    if (!source) {
+      erreur("Aucun catalogue indiqué", "Ajoutez à l'adresse le lien d'un document Grist public (?grist=…&table=…), ou ?demo pour une démonstration.");
+      return;
+    }
+
+    if (source.mode === "widget") {
+      grist.ready({ requiredAccess: "full" });
+      var instance = null, enCours = false;
+      var recharger = function () {
+        if (enCours) { return; }
+        enCours = true;
+        source.charger().then(function (d) {
+          if (instance) { instance.detruire(); }
+          instance = afficher(source, d);
+        }).catch(function (e) {
+          erreur("Lecture impossible", "Accordez l'accès complet au document à ce widget. (" + e.message + ")");
+        }).then(function () { enCours = false; });
+      };
+      grist.onRecords(recharger);
+      setTimeout(recharger, 600);
+      return;
+    }
+
+    source.charger().then(function (d) { afficher(source, d); }).catch(function (e) {
+      erreur("Catalogue momentanément indisponible", "Les données n'ont pas pu être chargées. Vérifiez que le document Grist est partagé en lecture publique. (" + e.message + ")");
+    });
+  })();
+  </script>
 </body>
 </html>
