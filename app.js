@@ -39,7 +39,10 @@
     { name: 'statut', title: 'Statut', type: 'Choice,Text', optional: true, description: 'Ex. Prototype' }
   ];
 
-  var PAGE_PUBLIQUE = 'https://lab17bis.github.io/lab17bis-ressources/plein-ecran.html';
+  var PAGE_PUBLIQUE = 'https://lab17bis.github.io/ressources/';
+  // Page autonome (hors de Grist) : lecture directe du document Grist, partagé en lecture publique.
+  // Les règles d'accès du document ne laissent passer que les fiches publiées et les colonnes publiques.
+  var SOURCE = { base: 'https://grist.numerique.gouv.fr/o/lab17bis/api/docs/7NeiCJkTBt7JgBB2rG9z9n', table: 'Base_de_donnees_ressources_' };
   var CONTACT = 'lab17bis@ac-reims.fr'; // adresse e-mail du Lab pour le bouton « Contribuer » (masqué tant qu'elle est vide)
   var BESOINS = [
     { id: 'comprendre', titre: 'Comprendre une situation', tags: ['Comprendre les usagers', 'Diagnostiquer', 'Voir plus clair', 'Comprendre une situation'] },
@@ -131,7 +134,9 @@
 
 
   // ---------- accès aux pièces jointes ----------
+  function auth(t) { return t.token ? '?auth=' + encodeURIComponent(t.token) : ''; }
   function getToken(force) {
+    if (state.autonome) return Promise.resolve({ baseUrl: SOURCE.base, token: null });
     if (!force && tokenCache && tokenCache.exp > Date.now()) return Promise.resolve(tokenCache.t);
     var p;
     if (window.grist && grist.docApi && grist.docApi.getAccessToken) {
@@ -149,7 +154,7 @@
   function infoFichier(id) {
     if (state.demo) return Promise.resolve({ fileName: 'exemple-' + id + '.txt' });
     return getToken().then(function (t) {
-      return fetch(t.baseUrl + '/attachments/' + encodeURIComponent(id) + '?auth=' + encodeURIComponent(t.token))
+      return fetch(t.baseUrl + '/attachments/' + encodeURIComponent(id) + auth(t))
         .then(function (r) { return r.ok ? r.json() : { fileName: 'Fichier ' + id }; });
     }).catch(function () { return { fileName: 'Fichier ' + id }; });
   }
@@ -163,7 +168,7 @@
       return;
     }
     getToken(true).then(function (t) {
-      return fetch(t.baseUrl + '/attachments/' + encodeURIComponent(id) + '/download?auth=' + encodeURIComponent(t.token));
+      return fetch(t.baseUrl + '/attachments/' + encodeURIComponent(id) + '/download' + auth(t));
     }).then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.blob(); })
       .then(function (blob) {
         var u = URL.createObjectURL(blob), a = document.createElement('a');
@@ -179,7 +184,7 @@
   function blobDe(id) {
     if (imgCache[id]) return imgCache[id];
     imgCache[id] = getToken().then(function (t) {
-      return fetch(t.baseUrl + '/attachments/' + encodeURIComponent(id) + '/download?auth=' + encodeURIComponent(t.token));
+      return fetch(t.baseUrl + '/attachments/' + encodeURIComponent(id) + '/download' + auth(t));
     }).then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.blob(); })
       .then(function (b) { return URL.createObjectURL(b); });
     imgCache[id].catch(function () { delete imgCache[id]; });
@@ -650,6 +655,27 @@
     state.rows = DEMO.map(normaliser);
     rendre();
   }
+  function demarrerAutonome() {
+    state.autonome = true;
+    fetch(SOURCE.base + '/tables/' + encodeURIComponent(SOURCE.table) + '/records')
+      .then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
+      .then(function (j) {
+        var noms = COLONNES.map(function (c) { return c.name; });
+        var rows = j.records.map(function (rec) {
+          var o = { id: rec.id };
+          noms.forEach(function (n) { if (n in rec.fields) o[n] = rec.fields[n]; });
+          return o;
+        });
+        state.mapped = true;
+        state.rows = rows.filter(function (x) { return !('valide' in x) || x.valide === true; }).map(normaliser);
+        rendre();
+      })
+      .catch(function (e) {
+        try { console.warn('[l17] chargement', e && e.message); } catch (x) {}
+        app.innerHTML = '<div class="fr-alert fr-alert--error"><h1 class="fr-alert__title">Catalogue momentanément indisponible</h1>' +
+          '<p>Les données n’ont pas pu être chargées. Réessayez dans quelques instants.</p></div>';
+      });
+  }
   function demarrerGrist() {
     grist.ready({ requiredAccess: 'read table', columns: COLONNES });
     grist.onRecords(function (recs) {
@@ -663,7 +689,8 @@
   function init() {
     versParent({ l17: 'ready' });
     if (window.grist && window.self !== window.top) demarrerGrist();
-    else demarrerDemo();
+    else if (/[?&]demo=1/.test(location.search)) demarrerDemo();
+    else demarrerAutonome();
   }
   // Copie de secours de l'API chargée après coup : on bascule en mode Grist
   window.__gristReload = function () {

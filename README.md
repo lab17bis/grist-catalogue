@@ -4,6 +4,20 @@ Widget personnalisé pour [Grist](https://grist.numerique.gouv.fr) (La Suite num
 
 Le dépôt ne contient **que le code de la page** : aucune ressource, aucun fichier, aucune donnée. Tout (titres, descriptions, pièces jointes) vient de la table Grist à laquelle le widget est lié, et reste protégé par les règles d'accès Grist.
 
+## Deux façons d'ouvrir le catalogue
+
+| Adresse | Mode | Données |
+|---|---|---|
+| `https://lab17bis.github.io/ressources/` | Page publique autonome, en pleine page | Lues directement dans le document Grist, partagé en lecture publique |
+| `https://lab17bis.github.io/ressources/interventions/` | Idem pour le catalogue des interventions | Idem |
+| Widget dans Grist (même adresse) | Vue de travail dans le document | Lues par l'API des widgets Grist |
+
+En page autonome, la page interroge l'API de Grist sans identifiant. Elle ne voit que ce qu'un visiteur anonyme a le droit de voir : les **règles d'accès du document** (Permissions avancées) décident des fiches et des colonnes publiques. Ne retirez pas ces règles.
+
+Les anciennes adresses `plein-ecran.html` redirigent vers la page autonome, en conservant le lien vers une fiche (`#r/…`).
+
+Ajouter `?demo=1` à l'adresse affiche des données fictives.
+
 ## Utilisation dans Grist
 
 1. Dans un document Grist, ajouter un widget **Personnalisé** → **URL personnalisée**.
@@ -24,10 +38,6 @@ Le dépôt ne contient **que le code de la page** : aucune ressource, aucun fich
 ## Modération
 
 Le widget affiche toutes les lignes qu'il reçoit. Pour ne publier que les ressources validées, **ne filtrez pas dans le widget** : posez une règle d'accès Grist (Permissions avancées) qui ne rend lisibles aux visiteurs que les lignes dont le statut est « validé ».
-
-## Mode démonstration
-
-Ouvert hors de Grist, `index.html` affiche des données fictives.
 
 ## Licences et mentions
 
