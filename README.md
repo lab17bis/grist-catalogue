@@ -1,85 +1,114 @@
-# Ressources du Lab 17 bis : catalogues au DSFR adossés à Grist
+# grist-catalogue
 
-**Publier un catalogue de ressources (outils, méthodes, conseils, assistants) et un catalogue d'interventions sous forme de pages web au Système de design de l'État (DSFR), alimentées par une base Grist.**
+> **Widget de mise en page pour Grist, clé en main.** Il transforme une table Grist en catalogue au Système de design de l'État (DSFR) : cartes, fiches détaillées, recherche, filtres, étiquettes de couleur, téléchargement des pièces jointes.
 
-Conçu par le [Lab 17 bis](https://lab17bis.github.io/ressources/), laboratoire d'innovation publique de l'[académie de Reims](https://www.ac-reims.fr/), au sein de l'équipe Dynamique Modernisation et Transformation (DMT) du rectorat.
+Tout se règle dans Grist, sans toucher au code : en-tête, logo, boutons, sections, filtres, couleurs, contenu des fiches. Le dépôt ne contient que le code : aucune donnée, aucun contenu propre à un usage.
 
-> Le dépôt ne contient **que le code des pages** : aucune ressource, aucun fichier, aucune donnée. Les fiches, descriptions et pièces jointes restent dans Grist, protégées par les règles d'accès du document.
+## À quoi ça sert
 
-## En bref
+Vous avez une table Grist de fiches : outils, méthodes, ressources, projets, actions, interventions, offres de service… Vous voulez la **mettre à disposition** sous forme de site consultable, aux couleurs de l'État, sans développer de site et sans quitter Grist.
 
-| Catalogue | Adresse publique | À quoi il sert |
-| --- | --- | --- |
-| **Catalogue de ressources** | <https://lab17bis.github.io/ressources/> | Partager les outils, méthodes, conseils et assistants du Lab 17 bis : intelligence collective, conduite de projet, accompagnement du changement. Chaque fiche peut être consultée, téléchargée et partagée par un lien direct. |
-| **Catalogue des interventions** | <https://lab17bis.github.io/ressources/interventions/> | Rendre visible l'offre de service du Lab 17 bis : animations, formations et acculturations, sessions de facilitation, accompagnements de projet, demandes de conseil. |
-
-Les deux pages fonctionnent de deux façons :
-
-- **en page publique autonome**, en pleine page, pour les visiteurs ;
-- **en widget personnalisé dans Grist**, comme vue de travail dans le document.
-
-## Fonctionnalités
-
-**Catalogue de ressources**
-
-- Entrée par le besoin (« Je veux… comprendre une situation, cadrer et décider, imaginer et concevoir, faire échanger un groupe, formaliser et piloter le changement »).
-- Sections par type (outils, méthodes, assistants, conseils, livrables, ateliers clés en main) et filtres propres à chaque section.
-- Recherche plein texte et tri.
-- Fiche détaillée : en bref, ce que ça apporte, comment faire, points de vigilance, matériel, aperçu des fiches PDF (recto et verso), téléchargement des pièces jointes.
-- Lien direct partageable vers chaque fiche (`#r/<identifiant>`).
-- Bouton « Contribuer » : message pré-rempli vers le Lab 17 bis.
-
-**Catalogue des interventions**
-
-- Filtres par statut (en cours, à venir, réalisées), type, année scolaire et origine (sollicitation ou initiative du Lab).
-- Fiche détaillée : besoin, démarche, livrables, effets, ressources mobilisées, citation.
-- Bouton « Solliciter le Lab ».
-
-## Fonctionnement
-
-```
-Visiteur ──> GitHub Pages : page DSFR (code seulement)
-         ──> API Grist, sans identifiant : fiches publiées et colonnes publiques uniquement
-```
-
-- En **page autonome**, la page interroge l'API de Grist comme un visiteur anonyme. Elle ne voit que ce que les **règles d'accès du document** (Permissions avancées) autorisent : seules les fiches publiées (case `valide`) et les colonnes publiques remontent. Ne retirez pas ces règles.
-- En **widget Grist**, la page lit les données par l'API des widgets, avec les droits de la personne connectée.
-- Les anciennes adresses `plein-ecran.html` redirigent vers la page autonome, en conservant le lien vers une fiche.
-- Ajouter `?demo=1` à l'adresse affiche des données fictives.
-
-## Mise en place
-
-1. Dans Grist, préparez la table : colonnes `titre`, `type`, `description`, `tags`, `fichier`, `image`, `valide`, etc. La liste complète figure dans la constante `COLONNES` de `app.js` (et de `interventions/app.js`).
-2. Posez les règles d'accès : les visiteurs ne lisent que les lignes publiées et les colonnes publiques.
-3. Partagez le document en lecture publique.
-4. Renseignez l'adresse du document et le nom de la table dans la constante `SOURCE` de `app.js`.
-5. Pour la vue de travail, ajoutez dans Grist un widget **Personnalisé** avec l'adresse `https://lab17bis.github.io/ressources/` (ou `…/ressources/interventions/`), accès **lecture de la table**, puis associez les colonnes.
-
-## Contenu du dépôt
-
-| Fichier | Contenu |
+| Vous avez | Vous obtenez |
 | --- | --- |
-| `index.html`, `app.js`, `style.css` | Catalogue de ressources. |
-| `interventions/` | Catalogue des interventions (même socle). |
-| `plein-ecran.html`, `interventions/plein-ecran.html` | Anciennes adresses, redirigées vers les pages autonomes. |
-| `assets/` | Logos, visuels des assistants, lecteur PDF ([PDF.js](https://mozilla.github.io/pdf.js/)). |
-| `dsfr/` | Feuilles de style, polices et icônes du DSFR (version 1.15.4), embarquées. |
+| Une table Grist, une ligne par fiche | Une page web en pleine page, au DSFR |
+| Des colonnes (titre, type, thèmes, fichiers…) | Des cartes, des filtres, une recherche, des fiches détaillées |
+| Des pièces jointes (PDF, images) | Des vignettes, un aperçu du PDF, des boutons de téléchargement |
+| Une case « publié » | Seules les fiches validées s'affichent |
+
+Démonstration avec des données fictives : <https://lab17bis.github.io/grist-catalogue/?demo>
+
+## Ce que le widget sait faire
+
+- **En-tête et pied de page** : bloc-marque, logo, titre, sous-titre, boutons à droite (contact, contribution…), logos et liens en pied de page, mention d'accessibilité.
+- **Sections** : un découpage principal (par type, par statut…), avec ordre et libellés au choix.
+- **Entrées thématiques** : des raccourcis du type « Je veux… » qui regroupent plusieurs valeurs.
+- **Filtres** : par colonne, à choix unique ou multiple, visibles partout ou seulement dans une section.
+- **Étiquettes de couleur** : sur les cartes et les fiches, une couleur par colonne ou par valeur, et l'étiquette « Nouveau ».
+- **Recherche** et **tris** : mélange, par section, plus récentes, ordre alphabétique.
+- **Mise en avant** : un bloc « À la une ».
+- **Fiche détaillée** : informations clés et blocs de contenu au choix (texte, liste, étapes numérotées, encadré, vigilance, citation, étiquettes, message), affichables sous condition.
+- **Pièces jointes** : vignette, galerie d'images, aperçu du PDF, téléchargement.
+- **Lien direct** vers chaque fiche, et code d'intégration (iframe) pour un autre site.
+
+## Le brancher en 5 minutes
+
+1. **Partir du modèle** (recommandé) : téléchargez [`modele/modele-grist-catalogue.grist`](modele/modele-grist-catalogue.grist), puis importez-le dans Grist (*Ajouter › Importer un document*). Il contient une table d'exemple vide, les réglages, les règles d'accès et les pages de l'éditeur. Vous pouvez aussi partir de votre propre table.
+2. **Ajouter l'éditeur** : dans le document, ajoutez une vue *Personnalisée* sur la table, avec l'adresse `https://lab17bis.github.io/grist-catalogue/editeur.html`, et accordez l'**accès complet**. Cette étape est déjà faite dans le modèle.
+3. **Régler** : onglets *En-tête et pied*, *Catalogue* et *Fiche*. Vérifiez dans *Aperçu*, puis cliquez sur *Enregistrer*.
+4. **Ouvrir au public** : partagez le document en lecture publique (*Partager › accès public : Lecteur*). Avec les *Permissions avancées*, réservez la lecture des visiteurs aux fiches publiées. Le modèle contient déjà ces règles.
+5. **Diffuser** : l'onglet *Publication* vérifie l'accès public et donne le lien de la page :
+   `https://lab17bis.github.io/grist-catalogue/?grist=<lien du document>&table=<table>`
+
+Pour un catalogue interne, non public : ajoutez dans Grist une vue *Personnalisée* avec l'adresse `https://lab17bis.github.io/grist-catalogue/index.html` (accès complet). Le catalogue s'affiche alors avec les droits de chaque personne connectée.
+
+## Le régler
+
+L'éditeur, ouvert dans Grist, compte cinq onglets :
+
+| Onglet | Ce qu'on y règle |
+| --- | --- |
+| En-tête et pied | Logo, bloc-marque, titre, sous-titre, boutons, pied de page, mention d'accessibilité |
+| Catalogue | Colonnes utilisées, sections, entrées thématiques, filtres, recherche, tris, étiquettes et couleurs |
+| Fiche | Informations clés, blocs de contenu et leurs conditions, pièces jointes, aperçu du PDF |
+| Aperçu | Le catalogue tel qu'il s'affichera, avec vos données |
+| Publication | Vérification de l'accès public, lien de la page, code d'intégration, export et import des réglages |
+
+Les réglages sont enregistrés en JSON dans la **description de la colonne `Config_catalogue`** de la table. Ne supprimez pas cette colonne.
+
+## Le reprendre et l'adapter
+
+- **L'utiliser tel quel** : pointez vos documents Grist vers les adresses ci-dessus. Aucune installation n'est nécessaire.
+- **L'héberger chez vous** : copiez le dépôt (*Fork*), activez GitHub Pages ou déposez les fichiers sur n'importe quel serveur web statique. Aucune compilation n'est nécessaire.
+- **Réutiliser des réglages** : l'onglet *Publication* exporte et importe les réglages en JSON. Ils ne contiennent aucune fiche.
+- **Modifier le code** : `js/catalogue.js` (moteur), `js/editeur.js` (éditeur), `js/page-dsfr.js` (en-tête et pied de page communs).
+
+| Fichier | Rôle |
+| --- | --- |
+| `index.html` | Page du catalogue (publique, ou vue de lecture dans Grist) |
+| `editeur.html`, `js/editeur.js`, `css/editeur.css` | Éditeur des réglages (widget Grist) |
+| `js/catalogue.js`, `css/catalogue.css` | Moteur du catalogue |
+| `js/page-dsfr.js`, `js/page-editeur.js`, `css/page.css` | En-tête et pied de page configurables, communs aux outils `grist-*` |
+| `exemples/demo.json` | Réglages et fiches fictives de la démonstration |
+| `modele/` | Modèle de document Grist sans données, à importer |
+| `vendor/` | DSFR 1.15.4 et PDF.js, embarqués |
+
+## Fonctionnement et sécurité
+
+```
+Visiteur ──> page DSFR (ce dépôt, GitHub Pages)
+         ──> API Grist, sans identifiant : fiches et colonnes autorisées par les règles d'accès
+```
+
+- La page publique lit le document comme un visiteur anonyme. Elle ne voit que ce que les **règles d'accès** du document autorisent.
+- Une fiche masquée par la page (non publiée) reste lisible par l'API si aucune règle d'accès ne la protège. L'onglet *Publication* le signale.
+- Paramètres d'adresse : `?demo` pour la démonstration, `&integre=1` pour masquer l'en-tête et le pied de page (intégration dans un autre site).
+
+## Limites
+
+- Le catalogue public suppose un document partagé en lecture publique. Pour un catalogue interne, utilisez la vue dans Grist.
+- Les colonnes de type Référence s'affichent sous forme de numéro : préférez des colonnes Texte, Choix ou Liste de choix.
+- Pas de pagination : le widget est prévu pour quelques centaines de fiches.
+- Aucun audit RGAA n'a été mené.
+
+## Autres outils de la même famille
+
+- [grist-questionnaire](https://github.com/lab17bis/grist-questionnaire) : widget de mise en page pour Grist, questionnaires au DSFR avec logique conditionnelle.
+- [grist-suivi-projets](https://github.com/lab17bis/grist-suivi-projets) : widget-outil pour Grist, application de suivi de projets au DSFR.
+
+Ils partagent les mêmes réglages d'en-tête et de pied de page.
 
 ## Écosystème
 
-- **[Grist](https://grist.numerique.gouv.fr)** : tableur-base de données libre ([gristlabs/grist-core](https://github.com/gristlabs/grist-core)), proposé aux agents de l'État par la [DINUM](https://www.numerique.gouv.fr/) dans [La Suite numérique](https://lasuite.numerique.gouv.fr/).
-- **[Système de design de l'État (DSFR)](https://www.systeme-de-design.gouv.fr/)** ([GouvernementFR/dsfr](https://github.com/GouvernementFR/dsfr)).
+- **[Grist](https://grist.numerique.gouv.fr)** : tableur-base de données libre ([gristlabs/grist-core](https://github.com/gristlabs/grist-core)), proposé aux agents publics par la [DINUM](https://www.numerique.gouv.fr/) dans [La Suite numérique](https://lasuite.numerique.gouv.fr/).
+- **[Système de design de l'État (DSFR)](https://www.systeme-de-design.gouv.fr/)** ([GouvernementFR/dsfr](https://github.com/GouvernementFR/dsfr)). Son usage est réservé aux sites des services de l'État.
 - **[Communauté Grist francophone](https://forum.grist.libre.sh/)**.
-- Autres outils du Lab 17 bis : [questionnaires DSFR avec logique conditionnelle](https://github.com/lab17bis/questionnaires), [suivi de projets](https://github.com/lab17bis/projets).
 
 ## Mots-clés
 
-Grist, widget Grist, catalogue, centre de ressources, bibliothèque d'outils, boîte à outils, fiches méthodes, intelligence collective, facilitation, conduite du changement, offre de service, DSFR, Système de design de l'État, La Suite numérique, DINUM, Éducation nationale, académie de Reims, laboratoire d'innovation publique, innovation publique.
+Grist, widget Grist, widget personnalisé, widget de mise en page, catalogue, centre de ressources, boîte à outils, base documentaire, fiches, offre de service, page publique, DSFR, Système de design de l'État, La Suite numérique, DINUM, service public, administration, clé en main, logiciel libre.
 
-## Licences et mentions
+## Licence
 
-- Les **contenus** du catalogue (fiches, visuels) sont publiés sous licence [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.fr), sauf mention contraire.
-- Le **DSFR** (`dsfr/`) et la police Marianne sont fournis par le Gouvernement. Leur usage est réservé aux sites et services de la sphère publique. Voir <https://www.systeme-de-design.gouv.fr/>.
-- Le **code** propre à ce dépôt est publié sous licence MIT (voir `LICENSE`). Réutilisation, adaptation et contributions bienvenues.
+Code sous licence MIT (voir `LICENSE`). Le DSFR (`vendor/dsfr/`) et PDF.js (`vendor/pdfjs/`) conservent leurs licences.
 
-Contact : Lab 17 bis, <lab17bis@ac-reims.fr>
+Conçu par le Lab 17 bis, laboratoire d'innovation publique de l'académie de Reims. Contributions bienvenues.
