@@ -93,7 +93,8 @@ Visiteur ──> page DSFR (ce dépôt, GitHub Pages)
 ## Autres outils de la même famille
 
 - [grist-questionnaire](https://github.com/lab17bis/grist-questionnaire) : widget de mise en page pour Grist, questionnaires au DSFR avec logique conditionnelle.
-- [grist-suivi-projets](https://github.com/lab17bis/grist-suivi-projets) : widget-outil pour Grist, application de suivi de projets au DSFR.
+- [grist-graphique](https://github.com/lab17bis/grist-graphique) : widget de mise en page pour Grist, tableaux de bord et graphiques au DSFR.
+- [grist-projet](https://github.com/lab17bis/grist-projet) : widget-outil pour Grist, espace d'équipe pour gérer des projets au DSFR.
 
 Ils partagent les mêmes réglages d'en-tête et de pied de page.
 
