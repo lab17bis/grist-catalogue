@@ -32,14 +32,18 @@ Démonstration avec des données fictives : <https://lab17bis.github.io/grist-ca
 
 ## Le brancher en 5 minutes
 
-1. **Partir du modèle** (recommandé) : téléchargez [`modele/modele-grist-catalogue.grist`](modele/modele-grist-catalogue.grist), puis importez-le dans Grist (*Ajouter › Importer un document*). Il contient une table d'exemple vide, les réglages, les règles d'accès et les pages de l'éditeur. Vous pouvez aussi partir de votre propre table.
-2. **Ajouter l'éditeur** : dans le document, ajoutez une vue *Personnalisée* sur la table, avec l'adresse `https://lab17bis.github.io/grist-catalogue/editeur.html`, et accordez l'**accès complet**. Cette étape est déjà faite dans le modèle.
+1. **Ajouter l'éditeur** : dans un document Grist, même vide, ajoutez une page *Personnalisé* sur la table de vos fiches (ou sur la table de départ), avec l'adresse `https://lab17bis.github.io/grist-catalogue/editeur.html`, et accordez l'**accès complet**.
+2. **Démarrer** : l'éditeur prépare un catalogue à partir des colonnes de la table. Sur une table vide, il propose aussi *Créer un catalogue d'exemple* : colonnes, fiches fictives et réglages, prêts à adapter.
 3. **Régler** : onglets *En-tête et pied*, *Catalogue* et *Fiche*. Vérifiez dans *Aperçu*, puis cliquez sur *Enregistrer*.
-4. **Ouvrir au public** : partagez le document en lecture publique (*Partager › accès public : Lecteur*). Avec les *Permissions avancées*, réservez la lecture des visiteurs aux fiches publiées. Le modèle contient déjà ces règles.
+4. **Ouvrir au public** : partagez le document en lecture publique (*Partager › accès public : Lecteur*). Avec les *Permissions avancées*, réservez la lecture des visiteurs aux fiches publiées : l'onglet *Publication* donne la règle à copier.
 5. **Diffuser** : l'onglet *Publication* vérifie l'accès public et donne le lien de la page :
    `https://lab17bis.github.io/grist-catalogue/?grist=<lien du document>&table=<table>`
 
+Conseil : donnez à la table un nom simple, sans tiret bas final (`Ressources` plutôt que `Base_de_donnees_ressources_`). Certaines messageries coupent ce caractère en fin de lien.
+
 Pour un catalogue interne, non public : ajoutez dans Grist une vue *Personnalisée* avec l'adresse `https://lab17bis.github.io/grist-catalogue/index.html` (accès complet). Le catalogue s'affiche alors avec les droits de chaque personne connectée.
+
+Le modèle [`modele/modele-grist-catalogue.grist`](modele/modele-grist-catalogue.grist) reste disponible pour qui préfère importer un document tout prêt, règles d'accès comprises.
 
 ## Le régler
 
@@ -95,6 +99,8 @@ Visiteur ──> page DSFR (ce dépôt, GitHub Pages)
 - [grist-questionnaire](https://github.com/lab17bis/grist-questionnaire) : widget de mise en page pour Grist, questionnaires au DSFR avec logique conditionnelle.
 - [grist-graphique](https://github.com/lab17bis/grist-graphique) : widget de mise en page pour Grist, tableaux de bord et graphiques au DSFR.
 - [grist-projet](https://github.com/lab17bis/grist-projet) : widget-outil pour Grist, espace d'équipe pour gérer des projets au DSFR.
+- [grist-reunion](https://github.com/lab17bis/grist-reunion) : widget-outil pour Grist, ordre du jour, notes, décisions, actions et compte rendu de réunion.
+- [grist-management](https://github.com/lab17bis/grist-management) : widget-outil pour Grist, espace de management visuel qui assemble les autres outils.
 
 Ils partagent les mêmes réglages d'en-tête et de pied de page.
 

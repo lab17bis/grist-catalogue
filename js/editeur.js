@@ -511,8 +511,56 @@
     E.config = d.config ? K.completer(d.config) : K.completer(configParDefaut());
     E.config.page = (d.config && d.config.page) || E.config.page || {};
     modifie(!d.config);
-    if (!d.config) { message("info", "Aucun réglage enregistré : un catalogue a été préparé à partir des colonnes de la table « " + E.tableId + " ». Ajustez-le puis enregistrez."); }
+    if (!d.config) {
+      message("info", "Aucun réglage enregistré : un catalogue a été préparé à partir des colonnes de la table « " + E.tableId + " ». Ajustez-le puis enregistrez.");
+      if (!E.lignes.length) { proposerExemple(); }
+    }
     afficher();
+  }
+
+  /* ---------- Démarrage avec l'exemple ---------- */
+
+  // Sur une table vide et sans réglages, l'éditeur propose un catalogue d'exemple complet :
+  // colonnes, fiches fictives et réglages. Tout se supprime ensuite comme n'importe quelle donnée.
+  function proposerExemple() {
+    $("#message").insertAdjacentHTML("beforeend", "<p class=\"fr-mt-1w\"><button type=\"button\" class=\"fr-btn fr-btn--sm fr-btn--secondary\" id=\"ed-exemple\">" +
+      "Créer un catalogue d'exemple (colonnes, fiches fictives et réglages)</button></p>");
+    $("#ed-exemple").addEventListener("click", function () {
+      this.disabled = true;
+      chargerExemple().catch(function (e) { message("error", "Création de l'exemple impossible : seuls les propriétaires du document peuvent ajouter des colonnes. (" + (e.message || e) + ")"); });
+    });
+  }
+
+  async function chargerExemple() {
+    var ex = await fetch("exemples/demo.json").then(function (r) { return r.json(); });
+    var existantes = {};
+    E.colonnes.forEach(function (c) { existantes[c.colId] = true; });
+    var actions = [];
+    Object.keys(ex.types).forEach(function (c) {
+      if (existantes[c]) { return; }
+      var info = { type: ex.types[c] };
+      if (/^Choice/.test(ex.types[c])) {
+        var vals = {};
+        ex.lignes.forEach(function (l) { var v = l[c]; (Array.isArray(v) ? v.slice(v[0] === "L" ? 1 : 0) : [v]).forEach(function (x) { if (x) { vals[x] = true; } }); });
+        info.widgetOptions = JSON.stringify({ choices: Object.keys(vals) });
+      }
+      actions.push(["AddColumn", E.tableId, c, info]);
+    });
+    var cols = {};
+    Object.keys(ex.types).forEach(function (c) {
+      cols[c] = ex.lignes.map(function (l) {
+        var v = l[c] === undefined ? null : l[c];
+        if (ex.types[c] === "ChoiceList" && Array.isArray(v) && v[0] !== "L") { v = ["L"].concat(v); }
+        if (ex.types[c] === "Date" && typeof v === "string") { v = Date.parse(v) / 1000; }
+        return v;
+      });
+    });
+    actions.push(["BulkAddRecord", E.tableId, ex.lignes.map(function () { return null; }), cols]);
+    if (!E.colConfig) { actions.push(["AddColumn", E.tableId, K.NOM_COLONNE_CONFIG, { type: "Text", label: K.NOM_COLONNE_CONFIG }]); }
+    actions.push(["ModifyColumn", E.tableId, K.NOM_COLONNE_CONFIG, { description: JSON.stringify(ex.config) }]);
+    await grist.docApi.applyUserActions(actions);
+    await demarrer();
+    message("success", "Catalogue d'exemple créé. Les colonnes de départ de la table (A, B, C…) peuvent être supprimées.");
   }
 
   if (typeof grist === "undefined") {
