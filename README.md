@@ -94,13 +94,20 @@ Visiteur ──> page DSFR (ce dépôt, GitHub Pages)
 - Pas de pagination : le widget est prévu pour quelques centaines de fiches.
 - Aucun audit RGAA n'a été mené.
 
+## Espaces clés en main
+
+Ce widget est déjà assemblé, avec d'autres, dans des **espaces** : des documents Grist complets à importer en une fois, vides ou avec un exemple fictif.
+
+- [espace-collaboratif](https://github.com/lab17bis/espace-collaboratif) : travailler ensemble : réunions, projets partagés et ressources communes.
+- [espace-accompagnement](https://github.com/lab17bis/espace-accompagnement) : suivre les sollicitations : offre de service, fiches contact, satisfaction et indicateurs.
+
 ## Autres outils de la même famille
 
 - [grist-questionnaire](https://github.com/lab17bis/grist-questionnaire) : widget de mise en page pour Grist, questionnaires au DSFR avec logique conditionnelle.
 - [grist-graphique](https://github.com/lab17bis/grist-graphique) : widget de mise en page pour Grist, tableaux de bord et graphiques au DSFR.
 - [grist-projet](https://github.com/lab17bis/grist-projet) : widget-outil pour Grist, espace d'équipe pour gérer des projets au DSFR.
 - [grist-reunion](https://github.com/lab17bis/grist-reunion) : widget-outil pour Grist, ordre du jour, notes, décisions, actions et compte rendu de réunion.
-- [grist-management](https://github.com/lab17bis/grist-management) : widget-outil pour Grist, espace de management visuel qui assemble les autres outils.
+- [grist-management](https://github.com/lab17bis/grist-management) : widget-outil pour Grist, écran de management visuel d'équipe (météo, signalements, escalade), qui affiche aussi les données des autres widgets.
 
 Ils partagent les mêmes réglages d'en-tête et de pied de page.
 
