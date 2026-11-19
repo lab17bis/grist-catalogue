@@ -1,0 +1,258 @@
+{
+ "config": {
+  "version": 1,
+  "page": {
+   "marque": "République\nfrançaise",
+   "titre": "Boîte à outils (démonstration)",
+   "sousTitre": "Exemple de catalogue construit avec grist-catalogue",
+   "boutons": [
+    {
+     "libelle": "Proposer une fiche",
+     "lien": "mailto:contact@exemple.fr?subject=Proposition%20%3A%20{titre}",
+     "style": "principal"
+    }
+   ],
+   "pied": {
+    "texte": "Catalogue de démonstration : toutes les données sont fictives.",
+    "liens": [
+     {
+      "libelle": "Code source",
+      "lien": "https://github.com/lab17bis/grist-catalogue"
+     }
+    ],
+    "mention": "Contenus fictifs.",
+    "accessibilite": "non conforme"
+   }
+  },
+  "titre": "Catalogue d'exemple",
+  "introduction": "Ce catalogue fictif montre les possibilités du widget : sections, entrées thématiques, filtres, étiquettes colorées et fiches détaillées.",
+  "elements": {
+   "singulier": "fiche",
+   "pluriel": "fiches",
+   "feminin": true
+  },
+  "colonnes": {
+   "titre": "titre",
+   "resume": "resume",
+   "description": "description",
+   "date": "date",
+   "lien": "lien",
+   "publie": "publie"
+  },
+  "sections": {
+   "colonne": "type",
+   "ordre": [
+    "Outil",
+    "Méthode",
+    "Conseil"
+   ],
+   "libelles": {
+    "Outil": "Outils",
+    "Méthode": "Méthodes",
+    "Conseil": "Conseils"
+   },
+   "libelleTout": "Tout"
+  },
+  "entrees": {
+   "titre": "Je veux…",
+   "colonne": "themes",
+   "liste": [
+    {
+     "libelle": "Comprendre",
+     "valeurs": [
+      "Diagnostic"
+     ]
+    },
+    {
+     "libelle": "Décider",
+     "valeurs": [
+      "Priorisation"
+     ]
+    },
+    {
+     "libelle": "Faire participer",
+     "valeurs": [
+      "Animation"
+     ]
+    }
+   ]
+  },
+  "filtres": [
+   {
+    "colonne": "duree",
+    "libelle": "Durée",
+    "ordre": [
+     "Moins d'une heure",
+     "Demi-journée",
+     "Journée"
+    ]
+   }
+  ],
+  "tris": [
+   {
+    "mode": "alterne",
+    "libelle": "Mélange"
+   },
+   {
+    "mode": "recent",
+    "libelle": "Plus récentes"
+   },
+   {
+    "mode": "alpha",
+    "libelle": "Ordre alphabétique"
+   }
+  ],
+  "etiquettes": [
+   {
+    "colonne": "type",
+    "fond": "#000091",
+    "texte": "#FFFFFF"
+   },
+   {
+    "colonne": "statut",
+    "valeurs": [
+     "Nouveau format"
+    ],
+    "fond": "#B8FEC9",
+    "texte": "#005F2E"
+   }
+  ],
+  "carte": {
+   "details": [
+    "duree",
+    "public"
+   ]
+  },
+  "fiche": {
+   "lienRetour": "Retour au catalogue",
+   "infos": [
+    {
+     "colonne": "duree",
+     "libelle": "Durée"
+    },
+    {
+     "colonne": "public",
+     "libelle": "Public"
+    }
+   ],
+   "blocs": [
+    {
+     "colonne": "apport",
+     "titre": "Ce que ça apporte",
+     "format": "encadre"
+    },
+    {
+     "colonne": "description",
+     "titre": "Présentation",
+     "format": "texte"
+    },
+    {
+     "colonne": "etapes",
+     "titre": "Comment faire",
+     "format": "etapes"
+    },
+    {
+     "colonne": "vigilance",
+     "titre": "Point de vigilance",
+     "titrePluriel": "Points de vigilance",
+     "format": "vigilance"
+    },
+    {
+     "colonne": "themes",
+     "format": "etiquettes"
+    }
+   ]
+  }
+ },
+ "types": {
+  "titre": "Text",
+  "type": "Choice",
+  "resume": "Text",
+  "description": "Text",
+  "themes": "ChoiceList",
+  "duree": "Choice",
+  "public": "Text",
+  "apport": "Text",
+  "etapes": "Text",
+  "vigilance": "Text",
+  "statut": "Choice",
+  "date": "Date",
+  "lien": "Text",
+  "publie": "Bool"
+ },
+ "lignes": [
+  {
+   "id": 1,
+   "titre": "Matrice à deux axes",
+   "type": "Outil",
+   "resume": "Classer des idées selon deux critères pour choisir où agir.",
+   "description": "Un tableau à deux axes (par exemple effort et impact) pour visualiser et comparer des options.",
+   "themes": [
+    "L",
+    "Priorisation"
+   ],
+   "duree": "Moins d'une heure",
+   "public": "5 à 12 personnes",
+   "apport": "Une décision partagée et argumentée.",
+   "etapes": "Choisir les deux critères.\nPlacer chaque idée.\nDiscuter des zones prioritaires.",
+   "vigilance": "Définir les critères avant de placer les idées.",
+   "date": 1793491200,
+   "publie": true
+  },
+  {
+   "id": 2,
+   "titre": "Atelier en petits groupes",
+   "type": "Méthode",
+   "resume": "Faire travailler un grand groupe en sous-groupes qui se relaient.",
+   "description": "Les participants tournent entre plusieurs tables thématiques.",
+   "themes": [
+    "L",
+    "Animation"
+   ],
+   "duree": "Demi-journée",
+   "public": "15 à 40 personnes",
+   "etapes": "Avant : préparer une question par table.\nFormer les groupes.\nFaire tourner les groupes toutes les 20 minutes.\nRestituer en plénière.",
+   "vigilance": "Prévoir un hôte par table.\nGarder du temps pour la restitution.",
+   "statut": "Nouveau format",
+   "date": 1794700800,
+   "publie": true
+  },
+  {
+   "id": 3,
+   "titre": "Gérer un temps de silence",
+   "type": "Conseil",
+   "resume": "Laisser au groupe le temps de réfléchir avant de relancer.",
+   "description": "Le silence est souvent un temps de réflexion, pas un blocage.",
+   "themes": [
+    "L",
+    "Animation"
+   ],
+   "duree": "Moins d'une heure",
+   "apport": "Des contributions plus réfléchies.",
+   "date": 1792281600,
+   "publie": true
+  },
+  {
+   "id": 4,
+   "titre": "Carte des parties prenantes",
+   "type": "Outil",
+   "resume": "Repérer qui est concerné par un projet et comment l'associer.",
+   "themes": [
+    "L",
+    "Diagnostic"
+   ],
+   "duree": "Moins d'une heure",
+   "public": "3 à 8 personnes",
+   "etapes": "Lister les acteurs.\nLes placer selon leur influence et leur intérêt.\nDécider comment associer chacun.",
+   "date": 1793000000,
+   "publie": true
+  },
+  {
+   "id": 5,
+   "titre": "Fiche non publiée",
+   "type": "Outil",
+   "resume": "Cette fiche n'apparaît pas : la case « publie » est décochée.",
+   "publie": false
+  }
+ ]
+}
