@@ -48,10 +48,18 @@
       document.title = titre;
     }
 
+    function boutonConfigurer(libelle, discret) {
+      var p = document.createElement("p");
+      p.className = "fr-mt-2w fr-mx-2w";
+      p.innerHTML = "<a class=\"fr-btn" + (discret ? " fr-btn--sm fr-btn--tertiary" : "") + "\" href=\"editeur.html" + location.search.replace(/&/g, "&amp;").replace(/"/g, "&quot;") + "\">" + libelle + "</a>";
+      app.appendChild(p);
+    }
+
     function afficher(source, donnees) {
       var config = donnees.config;
       if (!config) {
         erreur("Catalogue non configuré", "Ce tableau ne contient pas encore de réglages de catalogue. Configurez-le avec l'éditeur (editeur.html) dans Grist.");
+        if (source.mode === "widget" || source.mode === "demo") { boutonConfigurer("Configurer le catalogue", false); }
         return;
       }
       if (params.get("integre") !== "1") {
@@ -96,6 +104,7 @@
         source.charger().then(function (d) {
           if (instance) { instance.detruire(); }
           instance = afficher(source, d);
+          if (d.config) { boutonConfigurer("Configurer", true); }
         }).catch(function (e) {
           erreur("Lecture impossible", "Accordez l'accès complet au document à ce widget. (" + e.message + ")");
         }).then(function () { enCours = false; });
