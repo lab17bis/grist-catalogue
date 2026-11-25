@@ -328,7 +328,7 @@
         "<ul class=\"fr-btns-group fr-btns-group--inline fr-btns-group--sm\"><li><button type=\"button\" class=\"fr-btn fr-btn--secondary\" data-action=\"copier\" data-cible=\"lien-public\">Copier le lien</button></li>" +
         "<li><a class=\"fr-btn fr-btn--tertiary\" href=\"" + esc(lien) + "\" target=\"_blank\" rel=\"noopener\" title=\"Ouvrir le catalogue - nouvelle fenêtre\">Ouvrir le catalogue</a></li></ul>" +
         "<div class=\"fr-input-group\"><label class=\"fr-label\" for=\"code-integration\">Code d'intégration (iframe, sans en-tête ni pied de page)</label>" +
-        "<textarea class=\"fr-input ed-code\" readonly rows=\"3\" id=\"code-integration\">" + esc("<iframe src=\"" + lien + "&integre=1\" title=\"" + (E.config.titre || "Catalogue") + "\" style=\"width:100%;height:1200px;border:0\"></iframe>") + "</textarea></div>";
+        "<textarea class=\"fr-input ed-code\" readonly rows=\"3\" id=\"code-integration\">" + esc("<iframe src=\"" + lien + "&integre=1\" title=\"" + esc(E.config.titre || "Catalogue") + "\" style=\"width:100%;height:1200px;border:0\"></iframe>") + "</textarea></div>";
     }
     h += "<h2 class=\"fr-h5 ed-section-titre\">Réglages (JSON)</h2><p class=\"fr-text--sm\">Pour réutiliser ces réglages dans un autre document. Ils ne contiennent aucune fiche.</p>" +
       "<div class=\"fr-input-group\"><label class=\"fr-label\" for=\"config-json\">Réglages</label><textarea class=\"fr-input ed-code\" rows=\"8\" id=\"config-json\">" + esc(JSON.stringify(E.config, null, 2)) + "</textarea></div>" +
