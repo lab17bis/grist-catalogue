@@ -130,6 +130,7 @@ Ce widget est déjà assemblé, avec d'autres, dans des **espaces** : des docume
 - [grist-reunion](https://github.com/lab17bis/grist-reunion) : réunions : ordre du jour, séance, compte rendu et suivi des actions.
 - [grist-management](https://github.com/lab17bis/grist-management) : écran de management visuel d'équipe.
 - [grist-consultation](https://github.com/lab17bis/grist-consultation) : consultations : boîte à idées, valorisation des réalisations, votes et suites données.
+- [grist-annuaire](https://github.com/lab17bis/grist-annuaire) : annuaire des personnes et des structures d'un document : recherche, fiches, doublons, import, protection des données.
 - [grist-carte](https://github.com/lab17bis/grist-carte) : carte interactive des lignes d'une table, au fond de l'IGN.
 - [grist-graphe](https://github.com/lab17bis/grist-graphe) : cartographie des acteurs et de leurs liens.
 
@@ -150,3 +151,5 @@ Grist, widget Grist, widget personnalisé, widget de mise en page, catalogue, ce
 Code sous licence MIT (voir `LICENSE`). Le DSFR (`vendor/dsfr/`) et PDF.js (`vendor/pdfjs/`) conservent leurs licences.
 
 Conçu par le Lab 17 bis, laboratoire d'innovation publique de l'académie de Reims. Contributions bienvenues.
+
+Widget conçu par le Lab 17 bis, le laboratoire d'innovation publique de l'académie de Reims.
