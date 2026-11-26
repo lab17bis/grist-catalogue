@@ -2,6 +2,11 @@
 
 Les adresses `/v1/` ne changent pas : chaque version ajoute ou corrige, sans retirer ce qui existe.
 
+## 2026-11-26 (message de vérification de la publication)
+
+### Corrigé
+- Publication > « Vérifier » : le message « Le document n'est pas lisible publiquement » donne maintenant la marche à suivre (Partager › accès public › Lecteur, réservé aux propriétaires), rappelle qu'une règle d'accès peut masquer la table aux visiteurs, et distingue l'erreur 404 (table introuvable pour un visiteur : nom de table ou partage public à vérifier).
+
 ## 2026-11-25 (mention de conception)
 
 ### Ajouté

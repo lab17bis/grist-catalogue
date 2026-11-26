@@ -343,7 +343,10 @@
     z.innerHTML = "<p class=\"fr-text--sm\">Vérification…</p>";
     try {
       var r = await fetch(E.base + "/tables/" + encodeURIComponent(E.tableId) + "/columns", { credentials: "omit" });
-      if (!r.ok) { throw new Error("Le document n'est pas lisible publiquement (erreur " + r.status + "). Partagez-le en lecture publique."); }
+      if (!r.ok) {
+        if (r.status === 404) { throw new Error("La table « " + E.tableId + " » est introuvable pour un visiteur (erreur 404) : vérifiez son nom, puis que le document est partagé en lecture publique."); }
+        throw new Error("Le document n'est pas lisible publiquement (erreur " + r.status + "). Dans Grist : Partager › accès public › Lecteur (réservé aux propriétaires du document). Si le partage est déjà actif, une règle d'accès masque la table « " + E.tableId + " » aux visiteurs.");
+      }
       var cols = (await r.json()).columns;
       var conf = cols.find(function (c) { return c.id === K.NOM_COLONNE_CONFIG; });
       if (!conf || !conf.fields.description) { throw new Error("Les réglages ne sont pas lisibles publiquement : enregistrez-les, puis vérifiez que la colonne " + K.NOM_COLONNE_CONFIG + " n'est pas masquée aux visiteurs."); }
