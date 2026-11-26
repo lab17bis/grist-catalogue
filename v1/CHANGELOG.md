@@ -5,6 +5,7 @@ Les adresses `/v1/` ne changent pas : chaque version ajoute ou corrige, sans ret
 ## 2026-11-26 (message de vérification de la publication)
 
 ### Corrigé
+- « Vérifier l'accès public » signale aussi le cas d'une copie de travail non enregistrée (adresse contenant « ~ »), que personne d'autre ne peut lire.
 - Publication > « Vérifier » : le message « Le document n'est pas lisible publiquement » donne maintenant la marche à suivre (Partager › accès public › Lecteur, réservé aux propriétaires), rappelle qu'une règle d'accès peut masquer la table aux visiteurs, et distingue l'erreur 404 (table introuvable pour un visiteur : nom de table ou partage public à vérifier).
 
 ## 2026-11-25 (mention de conception)

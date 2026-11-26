@@ -342,6 +342,8 @@
     var z = $("#verif");
     z.innerHTML = "<p class=\"fr-text--sm\">Vérification…</p>";
     try {
+      // Copie de travail non enregistrée (identifiant avec « ~ ») : jamais lisible par un visiteur.
+      if (/~/.test(E.base || "")) { throw new Error("Vous travaillez sur une copie non enregistrée du document (son adresse contient « ~ »), qu'aucun visiteur ne peut lire. Enregistrez-la comme document (« Enregistrer une copie ») ou ouvrez le document d'origine, puis vérifiez à nouveau."); }
       var r = await fetch(E.base + "/tables/" + encodeURIComponent(E.tableId) + "/columns", { credentials: "omit" });
       if (!r.ok) {
         if (r.status === 404) { throw new Error("La table « " + E.tableId + " » est introuvable pour un visiteur (erreur 404) : vérifiez son nom, puis que le document est partagé en lecture publique."); }
