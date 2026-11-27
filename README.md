@@ -53,9 +53,10 @@ L'éditeur, ouvert dans Grist, a la barre commune aux widgets du Lab 17 bis : no
 | --- | --- |
 | Réglages › Catalogue | Colonnes utilisées, sections, entrées thématiques, filtres, recherche, tris, étiquettes et couleurs |
 | Réglages › Fiche | Informations clés, blocs de contenu et leurs conditions, pièces jointes, aperçu du PDF |
+| Réglages › Export et import | Réglages en JSON, à copier ou à reprendre dans un autre document (aucune fiche) |
 | En-tête et pied | Logo, bloc-marque, titre, sous-titre, boutons, pied de page, mention d'accessibilité |
 | Aperçu | Le catalogue tel qu'il s'affichera, avec vos données |
-| Publication | Affichage de cette vue Grist (éditeur ou page d'usage), vérification de l'accès public, lien de la page, code d'intégration, export et import des réglages |
+| Publication | Affichage de cette vue Grist (éditeur ou page d'usage), vérification de l'accès public, lien de la page, code d'intégration |
 
 **Éditeur du widget ou page d'usage, avec le même lien.** Chaque vue Grist choisit ce qu'elle affiche (onglet *Publication*, rubrique *Affichage de cette vue Grist*) : l'**éditeur du widget** (affichage par défaut) ou la **page d'usage** (l'outil avec son en-tête et son pied de page, sans barre de réglages ; un lien *Éditer le widget*, en bas de page, rouvre l'éditeur). Après *Appliquer à cette vue*, cliquez sur *Enregistrer* en haut à droite de la vue Grist pour garder le choix. Pour avoir les deux dans un document, ajoutez deux vues Personnalisées avec la même adresse. Ce choix n'est pas une protection : les droits restent ceux du document (Partager, Permissions avancées).
 
@@ -67,7 +68,7 @@ Les réglages sont enregistrés en JSON dans la **description de la colonne `Con
 
 - **L'utiliser tel quel** : pointez vos documents Grist vers les adresses ci-dessus. Aucune installation n'est nécessaire.
 - **L'héberger chez vous** : copiez le dépôt (*Fork*), activez GitHub Pages ou déposez les fichiers sur n'importe quel serveur web statique. Aucune compilation n'est nécessaire.
-- **Réutiliser des réglages** : l'onglet *Publication* exporte et importe les réglages en JSON. Ils ne contiennent aucune fiche.
+- **Réutiliser des réglages** : le sous-onglet *Export et import* de *Réglages* exporte et importe les réglages en JSON. Ils ne contiennent aucune fiche.
 - **Modifier le code** : `js/catalogue.js` (moteur), `js/editeur.js` (éditeur), `js/page-dsfr.js` (en-tête et pied de page communs).
 
 | Fichier | Rôle |

@@ -37,7 +37,7 @@
   })();
   var BARRE = BL ? BL.creer(document.body, {
     nom: "Widget catalogue", idEtat: "etat", idEnregistrer: "enregistrer", actif: E.vue,
-    onglets: [{ id: "reglages", libelle: "Réglages", sous: [{ id: "liste", libelle: "Catalogue" }, { id: "fiche", libelle: "Fiche" }] },
+    onglets: [{ id: "reglages", libelle: "Réglages", sous: [{ id: "liste", libelle: "Catalogue" }, { id: "fiche", libelle: "Fiche" }, { id: "json", libelle: "Export et import" }] },
       { id: "page", libelle: "En-tête et pied" }, { id: "apercu", libelle: "Aperçu" }, { id: "publication", libelle: "Publication" }],
     annuler: RETOUR ? "Fermer l'éditeur" : null,
     surAnnuler: function () { if (!E.modifie || window.confirm("Fermer sans enregistrer les modifications ?")) { E.modifie = false; location.href = RETOUR; } },
@@ -370,10 +370,6 @@
       "<div class=\"fr-input-group\"><label class=\"fr-label\" for=\"lien-reserve\">Lien à envoyer aux personnes invitées</label><input class=\"fr-input ed-code\" id=\"lien-reserve\" readonly></div>" +
       "<button type=\"button\" class=\"fr-btn fr-btn--sm fr-btn--secondary\" data-action=\"copier\" data-cible=\"lien-reserve\">Copier le lien réservé</button>" +
       "<div class=\"fr-callout fr-mt-3w\"><p class=\"fr-callout__text fr-text--sm\"><strong>Page publique ou lien réservé ?</strong> Publique : toute personne qui a le lien voit les fiches publiées, sans compte. Réservée : il faut être invité et connecté. Pour des fiches internes, choisissez le lien réservé.</p></div>";
-    h += "<h2 class=\"fr-h5 ed-section-titre\">Réglages (JSON)</h2><p class=\"fr-text--sm\">Pour réutiliser ces réglages dans un autre document. Ils ne contiennent aucune fiche.</p>" +
-      "<div class=\"fr-input-group\"><label class=\"fr-label\" for=\"config-json\">Réglages</label><textarea class=\"fr-input ed-code\" rows=\"8\" id=\"config-json\">" + esc(JSON.stringify(E.config, null, 2)) + "</textarea></div>" +
-      "<ul class=\"fr-btns-group fr-btns-group--inline fr-btns-group--sm\"><li><button type=\"button\" class=\"fr-btn fr-btn--secondary\" data-action=\"copier\" data-cible=\"config-json\">Copier</button></li>" +
-      "<li><button type=\"button\" class=\"fr-btn fr-btn--tertiary\" data-action=\"importer\">Remplacer par le texte ci-dessus</button></li></ul>";
     h += "</div>";
     $("#vue").innerHTML = h;
     var pg = $("#page-grist");
@@ -382,6 +378,16 @@
       if (!v) { r.value = ""; return; }
       try { var u = new URL(v); var sg = u.pathname.split("/"), ip = sg.lastIndexOf("p"); if (ip > 1 && /^[A-Za-z0-9]{20,}$/.test(sg[ip - 1])) { r.value = "Cette adresse contient l'identifiant long du document : Grist ignorerait la page. Ouvrez la page dans Grist et copiez l'adresse affichée dans la barre du navigateur (elle contient le nom du document)."; return; } u.search = ""; u.searchParams.set("embed", "true"); r.value = u.href; } catch (e) { r.value = "Adresse non reconnue : collez l'adresse complète de la page Grist."; }
     }); }
+  }
+
+  function vueJson() {
+    var h = "<div class=\"ed-panneau ed-textes\">";
+    h += "<h2 class=\"fr-h5\">Export et import des réglages</h2><p class=\"fr-text--sm\">Pour réutiliser ces réglages dans un autre document. Ils ne contiennent aucune fiche.</p>" +
+      "<div class=\"fr-input-group\"><label class=\"fr-label\" for=\"config-json\">Réglages</label><textarea class=\"fr-input ed-code\" rows=\"8\" id=\"config-json\">" + esc(JSON.stringify(E.config, null, 2)) + "</textarea></div>" +
+      "<ul class=\"fr-btns-group fr-btns-group--inline fr-btns-group--sm\"><li><button type=\"button\" class=\"fr-btn fr-btn--secondary\" data-action=\"copier\" data-cible=\"config-json\">Copier</button></li>" +
+      "<li><button type=\"button\" class=\"fr-btn fr-btn--tertiary\" data-action=\"importer\">Remplacer par le texte ci-dessus</button></li></ul>";
+    h += "</div>";
+    $("#vue").innerHTML = h;
   }
 
   async function verifier() {
@@ -416,6 +422,7 @@
     if (E.vue === "page") { vuePage(); }
     else if (E.vue === "liste") { vueListe(); }
     else if (E.vue === "fiche") { vueFiche(); }
+    else if (E.vue === "json") { vueJson(); }
     else if (E.vue === "apercu") { vueApercu(); }
     else { vuePublication(); blocMode(); }
     window.scrollTo(0, y);
