@@ -2,6 +2,12 @@
 
 Les adresses `/v1/` ne changent pas : chaque version ajoute ou corrige, sans retirer ce qui existe.
 
+## 2026-11-27 (publication réservée)
+
+### Ajouté
+
+- Onglet Publication : rappel de la différence entre page publique et accès réservé aux personnes invitées, avec un lien réservé à copier pour le catalogue.
+
 ## 2026-11-26 (message de vérification de la publication)
 
 ### Corrigé
