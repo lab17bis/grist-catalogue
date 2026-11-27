@@ -25,6 +25,41 @@
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[c];
     });
   }
+
+  // Barre commune de l'éditeur (commun/barre.js) : Réglages, En-tête et pied, Aperçu, Publication.
+  var BL = window.BarreLab, PAGE_USAGE = false;
+  // Arrivée depuis la page de lecture (bouton « Configurer ») : un bouton y ramène.
+  var RETOUR = (function () {
+    try {
+      var r = new URL(document.referrer), dossier = function (u) { return u.pathname.replace(/[^\/]*$/, ""); };
+      return r.origin === location.origin && !/editeur\.html$/.test(r.pathname) && dossier(r) === dossier(location) ? document.referrer : null;
+    } catch (e) { return null; }
+  })();
+  var BARRE = BL ? BL.creer(document.body, {
+    nom: "Widget catalogue", idEtat: "etat", idEnregistrer: "enregistrer", actif: E.vue,
+    onglets: [{ id: "reglages", libelle: "Réglages", sous: [{ id: "liste", libelle: "Catalogue" }, { id: "fiche", libelle: "Fiche" }] },
+      { id: "page", libelle: "En-tête et pied" }, { id: "apercu", libelle: "Aperçu" }, { id: "publication", libelle: "Publication" }],
+    annuler: RETOUR ? "Fermer l'éditeur" : null,
+    surAnnuler: function () { if (!E.modifie || window.confirm("Fermer sans enregistrer les modifications ?")) { E.modifie = false; location.href = RETOUR; } },
+    surChoix: function (i) { E.vue = i; afficher(); }
+  }) : null;
+  // Page d'usage : même lien, sans barre ; l'Aperçu en pleine page. Choix propre à chaque vue Grist (onglet Publication).
+  function modeUsage(oui) {
+    PAGE_USAGE = !!oui;
+    if (!BL) { return; }
+    BL.pageUsage(PAGE_USAGE);
+    if (PAGE_USAGE) { BL.lienEditer(function () { modeUsage(false); E.vue = "liste"; afficher(); window.scrollTo(0, 0); }); }
+  }
+  function blocMode() {
+    if (!BL || E.vue !== "publication") { return; }
+    var p = document.querySelector("#vue .ed-panneau");
+    if (!p || p.querySelector(".cl-mode")) { return; }
+    p.insertAdjacentHTML("afterbegin", BL.modeHtml("ed", PAGE_USAGE ? "page" : "editeur"));
+    BL.brancherMode(p, "ed", function (m, ok) {
+      if (!ok) { message("warning", "Affichage appliqué pour cette fois seulement : Grist n'a pas enregistré le choix (droits insuffisants sur le document ?)."); }
+      if (m === "page") { modeUsage(true); E.vue = "apercu"; afficher(); } else { message("success", "Cette vue Grist affiche l'éditeur du widget."); }
+    });
+  }
   function enLignes(t) {
     var cles = Object.keys(t);
     return (t.id || []).map(function (_, i) { var o = {}; cles.forEach(function (k) { o[k] = t[k][i]; }); return o; });
@@ -300,7 +335,7 @@
   }
 
   function vueApercu() {
-    $("#vue").innerHTML = "<div class=\"fr-notice fr-notice--info fr-mb-2w\"><div class=\"fr-container\"><div class=\"fr-notice__body\">" +
+    $("#vue").innerHTML = "<div class=\"fr-notice fr-notice--info fr-mb-2w cl-avis-apercu\"><div class=\"fr-container\"><div class=\"fr-notice__body\">" +
       "<p class=\"fr-notice__title\">Aperçu avec les réglages en cours (même non enregistrés). Les fiches non publiées sont masquées.</p></div></div></div>" +
       "<div class=\"ce-apercu\"><div id=\"ap-entete\"></div><main class=\"fr-container fr-py-4w\" id=\"ap-contenu\"></main><div id=\"ap-pied\"></div></div>";
     if (E.apercu) { E.apercu.detruire(); }
@@ -374,13 +409,15 @@
   }
 
   function afficher() {
+    if (PAGE_USAGE) { E.vue = "apercu"; }
+    if (BARRE) { BARRE.choisir(E.vue); }
     var y = window.scrollY;
     if (E.vue !== "apercu" && E.apercu) { E.apercu.detruire(); E.apercu = null; }
     if (E.vue === "page") { vuePage(); }
     else if (E.vue === "liste") { vueListe(); }
     else if (E.vue === "fiche") { vueFiche(); }
     else if (E.vue === "apercu") { vueApercu(); }
-    else { vuePublication(); }
+    else { vuePublication(); blocMode(); }
     window.scrollTo(0, y);
   }
 
@@ -585,6 +622,7 @@
     return;
   }
   grist.ready({ requiredAccess: "full" });
+  if (BL) { BL.mode().then(function (m) { if (m === "page" && !E.modifie) { modeUsage(true); E.vue = "apercu"; if (E.config) { afficher(); } } }); }
   var lance = false;
   function lancer() {
     if (lance) { return; }

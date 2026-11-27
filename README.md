@@ -34,7 +34,7 @@ Démonstration avec des données fictives : <https://lab17bis.github.io/grist-ca
 
 1. **Ajouter l'éditeur** : dans un document Grist, même vide, ajoutez une page *Personnalisé* sur la table de vos fiches (ou sur la table de départ), avec l'adresse `https://lab17bis.github.io/grist-catalogue/v1/editeur.html`, et accordez l'**accès complet**.
 2. **Démarrer** : l'éditeur prépare un catalogue à partir des colonnes de la table. Sur une table vide, il propose aussi *Créer un catalogue d'exemple* : colonnes, fiches fictives et réglages, prêts à adapter.
-3. **Régler** : onglets *En-tête et pied*, *Catalogue* et *Fiche*. Vérifiez dans *Aperçu*, puis cliquez sur *Enregistrer*.
+3. **Régler** : onglet *Réglages* (sous-onglets *Catalogue* et *Fiche*), puis *En-tête et pied*. Vérifiez dans *Aperçu*, puis cliquez sur *Enregistrer*.
 4. **Ouvrir au public** : partagez le document en lecture publique (*Partager › accès public : Lecteur*). Avec les *Permissions avancées*, réservez la lecture des visiteurs aux fiches publiées : l'onglet *Publication* donne la règle à copier.
 5. **Diffuser** : l'onglet *Publication* vérifie l'accès public et donne le lien de la page :
    `https://lab17bis.github.io/grist-catalogue/v1/?grist=<lien du document>&table=<table>`
@@ -47,15 +47,19 @@ Le modèle [`modele/modele-grist-catalogue.grist`](modele/modele-grist-catalogue
 
 ## Le régler
 
-L'éditeur, ouvert dans Grist, compte cinq onglets :
+L'éditeur, ouvert dans Grist, a la barre commune aux widgets du Lab 17 bis : nom et statut à gauche, quatre onglets au centre, *Enregistrer* à droite.
 
 | Onglet | Ce qu'on y règle |
 | --- | --- |
+| Réglages › Catalogue | Colonnes utilisées, sections, entrées thématiques, filtres, recherche, tris, étiquettes et couleurs |
+| Réglages › Fiche | Informations clés, blocs de contenu et leurs conditions, pièces jointes, aperçu du PDF |
 | En-tête et pied | Logo, bloc-marque, titre, sous-titre, boutons, pied de page, mention d'accessibilité |
-| Catalogue | Colonnes utilisées, sections, entrées thématiques, filtres, recherche, tris, étiquettes et couleurs |
-| Fiche | Informations clés, blocs de contenu et leurs conditions, pièces jointes, aperçu du PDF |
 | Aperçu | Le catalogue tel qu'il s'affichera, avec vos données |
-| Publication | Vérification de l'accès public, lien de la page, code d'intégration, export et import des réglages |
+| Publication | Affichage de cette vue Grist (éditeur ou page d'usage), vérification de l'accès public, lien de la page, code d'intégration, export et import des réglages |
+
+**Éditeur du widget ou page d'usage, avec le même lien.** Chaque vue Grist choisit ce qu'elle affiche (onglet *Publication*, rubrique *Affichage de cette vue Grist*) : l'**éditeur du widget** (affichage par défaut) ou la **page d'usage** (l'outil avec son en-tête et son pied de page, sans barre de réglages ; un lien *Éditer le widget*, en bas de page, rouvre l'éditeur). Pour avoir les deux dans un document, ajoutez deux vues Personnalisées avec la même adresse. Ce choix n'est pas une protection : les droits restent ceux du document (Partager, Permissions avancées).
+
+Arrivé dans l'éditeur par le bouton *Configurer* de la page de lecture (`index.html`), le bouton *Fermer l'éditeur* y ramène.
 
 Les réglages sont enregistrés en JSON dans la **description de la colonne `Config_catalogue`** de la table. Ne supprimez pas cette colonne.
 
